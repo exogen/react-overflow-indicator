@@ -164,9 +164,9 @@ One&nbsp;of… <br>
 
 Distance (number of pixels or CSS length unit like `1em`) to the edge of the
 content at which to consider the viewport fully scrolled. For example, if set to
-10, then the Overflow will consider scrolling to have reached the end as long as
-it’s within 10 pixels of the border. You can use this when your content has a
-lot of padding and scrolling close enough to the edge should be good enough.
+10, then it will consider scrolling to have reached the end as long as it’s
+within 10 pixels of the border. You can use this when your content has padding
+and scrolling close to the edge should be good enough.
 
 </td>
 </tr>
