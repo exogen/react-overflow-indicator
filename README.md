@@ -111,6 +111,9 @@ const MyContainer = styled(Overflow)`
 `;
 ```
 
+Any remaining props beyond those documented below will be passed along to the
+underlying DOM element. Use this to pass `className`, `style`, etc.
+
 #### Props
 
 <table>
@@ -173,6 +176,11 @@ Wrapper for content to render inside the scrollable viewport. This element will
 grow to whatever size it needs to hold its content, and will cause the parent
 viewport element to overflow. It must be rendered inside an `<Overflow>`
 ancestor.
+
+Although you can style this element directly by passing additional props like
+`className` and `style`, it’s preferably to include that style on your own
+element inside the `<Overflow.Content>` instead – otherwise you risk interfering
+with the styles this component needs to function.
 
 #### Props
 
