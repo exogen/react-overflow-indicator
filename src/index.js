@@ -84,6 +84,8 @@ const emptyStyle = {};
  * </Overflow>
  * ```
  *
+ * Usage with styled-components:
+ *
  * ```jsx
  * const MyContainer = styled(Overflow)`
  *   max-height: 500px;
@@ -91,7 +93,8 @@ const emptyStyle = {};
  * ```
  *
  * Any remaining props beyond those documented below will be passed along to the
- * underlying DOM element. Use this to pass `className`, `style`, etc.
+ * underlying DOM element. Use this to pass `className`, `style`, or any other
+ * native attribute.
  */
 export default function Overflow({
   children,

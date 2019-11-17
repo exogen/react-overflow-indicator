@@ -105,7 +105,7 @@ for it to actually scroll. Apply that style as you would any other element, with
 <Overflow style={{ maxHeight: 500 }}>…</Overflow>
 ```
 
-Example with styled-components:
+Usage with styled-components:
 
 ```jsx
 const MyContainer = styled(Overflow)`
@@ -114,7 +114,8 @@ const MyContainer = styled(Overflow)`
 ```
 
 Any remaining props beyond those documented below will be passed along to the
-underlying DOM element. Use this to pass `className`, `style`, etc.
+underlying DOM element. Use this to pass `className`, `style`, or any other
+native attribute.
 
 #### Props
 
