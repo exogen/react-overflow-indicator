@@ -126,7 +126,7 @@ function renderType(value, extraRows = [], depth = 0, topLevel = false) {
   }
   if (value.name === 'enum') {
     return `One&nbsp;of… <br>\n${indent}&nbsp;&nbsp;${value.value
-      .map(t => renderValue(t, depth + 1))
+      .map(v => renderValue(v))
       .join(` <br>\n${indent}&nbsp;&nbsp;`)}`;
   }
   if (value.name === 'union') {
@@ -157,7 +157,7 @@ const CODE_CHARS = {
   '\u00A0': '<code title="non-breaking space">\\u00A0</code>'
 };
 
-function renderValue(value, indent = 0) {
+function renderValue(value) {
   if (!value) {
     return '';
   }
