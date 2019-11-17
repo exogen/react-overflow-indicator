@@ -1,6 +1,21 @@
 # react-overflow-indicator ⏬
 
+- Let users know when there’s more content to see in an `overflow` container, in
+  case their device hides scrollbars.
+- Uses
+  [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
+  for great performance – no listening for `scroll` or `resize` events.
+- Flexible: render any style of indicator you want (shadows, arrows, messages,
+  etc.) wherever you want, using any styling solution.
+
 <table>
+<thead>
+<tr>
+<th colspan="3">
+Some examples: shadows, fades, icons…
+</th>
+</tr>
+</thead>
 <tbody>
 <tr>
 <td>
@@ -21,14 +36,6 @@
 </tr>
 </tbody>
 </table>
-
-- Let users know when there’s more content to see in an `overflow` container, in
-  case their device hides scrollbars.
-- Uses
-  [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
-  for great performance – no listening for `scroll` or `resize` events.
-- Flexible: render any style of indicator you want (shadows, arrows, messages,
-  etc.) wherever you want, using any styling solution.
 
 ## Quick Start
 
