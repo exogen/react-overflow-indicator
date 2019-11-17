@@ -1,12 +1,11 @@
 {
   "name": "react-overflow-indicator",
-  "version": "0.0.0",
-  "main": "index.js",
+  "version": "0.1.0",
+  "main": "./dist/index.cjs.js",
   "license": "MIT",
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs.js",
   "module": "./dist/index.esm.js",
   "browser": {
     "./dist/index.cjs.js": "./dist/index.browser.cjs.js",
