@@ -2,8 +2,6 @@
 
 ![Animated demo](./overflow.gif)
 
-## What’s it do?
-
 - Let users know when there’s more content to see in an `overflow` container, in
   case their device hides scrollbars.
 - Uses
