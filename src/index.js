@@ -171,8 +171,8 @@ Overflow.propTypes = {
  * `<Overflow>` ancestor.
  *
  * Although you can style this element directly by passing additional props
- * like `className` and `style`, it’s preferably to include that style on your
- * own element inside the `<Overflow.Content>` instead – otherwise you risk
+ * like `className` and `style`, it’s preferable to include styling on your
+ * own element inside `<Overflow.Content>` instead – otherwise you risk
  * interfering with the styles this component needs to function.
  */
 function OverflowContent({ children, style: styleProp, ...rest }) {
