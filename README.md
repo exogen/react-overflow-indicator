@@ -1,6 +1,26 @@
 # react-overflow-indicator ⏬
 
-![Animated demo](./overflow.gif)
+<table>
+<tbody>
+<tr>
+<td>
+
+![Shadow animated demo](./demo-shadow.gif)
+
+</td>
+<td>
+
+![Fade animated demo](./demo-fade.gif)
+
+</td>
+<td>
+
+![Icon animated demo](./demo-icon.gif)
+
+</td>
+</tr>
+</tbody>
+</table>
 
 - Let users know when there’s more content to see in an `overflow` container, in
   case their device hides scrollbars.
@@ -24,7 +44,8 @@ Import:
 import Overflow from 'react-overflow-indicator';
 ```
 
-Render indicators automatically using the `Overflow.Indicator` component:
+Render indicators automatically using `<Overflow.Indicator>` inside of
+`<Overflow>`:
 
 ```jsx
 <Overflow>
@@ -35,7 +56,7 @@ Render indicators automatically using the `Overflow.Indicator` component:
 </Overflow>
 ```
 
-…or, use the `onStateChange` prop to react to scrollability however you like:
+…or, use the `onStateChange` prop to react to overflow however you like:
 
 ```jsx
 const [canScroll, setCanScroll] = useState(false);

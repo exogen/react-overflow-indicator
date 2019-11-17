@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import Overflow from '../src';
 
-const shadowStart = 'rgba(68, 49, 38, 0.3)';
-const shadowEnd = 'rgba(56, 44, 36, 0)';
-
 function MoreIndicator({ isVisible = true }) {
   return (
     <span
@@ -24,7 +21,13 @@ function MoreIndicator({ isVisible = true }) {
   );
 }
 
-function Shadow({ direction, isVisible, size = 30 }) {
+function Shadow({
+  direction,
+  isVisible,
+  size = 30,
+  startColor = 'rgba(68, 49, 38, 0.3)',
+  endColor = 'rgba(56, 44, 36, 0)'
+}) {
   const style = {
     position: 'absolute',
     zIndex: 1,
@@ -38,28 +41,28 @@ function Shadow({ direction, isVisible, size = 30 }) {
       style.left = 0;
       style.right = 0;
       style.height = size;
-      style.background = `linear-gradient(to bottom, ${shadowStart}, ${shadowEnd})`;
+      style.background = `linear-gradient(to bottom, ${startColor}, ${endColor})`;
       break;
     case 'left':
       style.top = 0;
       style.left = 0;
       style.bottom = 0;
       style.width = size;
-      style.background = `linear-gradient(to right, ${shadowStart}, ${shadowEnd})`;
+      style.background = `linear-gradient(to right, ${startColor}, ${endColor})`;
       break;
     case 'right':
       style.top = 0;
       style.right = 0;
       style.bottom = 0;
       style.width = size;
-      style.background = `linear-gradient(to left, ${shadowStart}, ${shadowEnd})`;
+      style.background = `linear-gradient(to left, ${startColor}, ${endColor})`;
       break;
     case 'down':
       style.left = 0;
       style.right = 0;
       style.bottom = 0;
       style.height = size;
-      style.background = `linear-gradient(to top, ${shadowStart}, ${shadowEnd})`;
+      style.background = `linear-gradient(to top, ${startColor}, ${endColor})`;
       break;
   }
   return <div style={style} />;
@@ -175,6 +178,59 @@ function OverflowDemo({
 export default function DemoPage() {
   return (
     <main>
+      <style jsx global>
+        {`
+          @keyframes bounce {
+            0% {
+              transform: translate3d(-50%, 0, 0);
+            }
+            50% {
+              transform: translate3d(-50%, -10px, 0);
+            }
+            100% {
+              transform: translateY(-50%, 0, 0);
+            }
+          }
+
+          @keyframes fadeOut {
+            0% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+            }
+          }
+
+          ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ddd;
+            margin: 10px;
+            background: rgb(247, 245, 241);
+          }
+
+          li {
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 12px;
+          }
+
+          li:last-child {
+            border-bottom: 0;
+          }
+
+          h2 {
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 0.8;
+          }
+        `}
+      </style>
       <OverflowDemo
         title="Demo"
         style={overflowStyle}
@@ -192,12 +248,157 @@ export default function DemoPage() {
         contentStyle={contentStyle}
         initialMounted={false}
       />
-      <Overflow style={{ maxHeight: 300 }}>
-        <Overflow.Content style={{ minHeight: 800 }}>
-          Render an element or put your content directly here…
-        </Overflow.Content>
-        <Overflow.Indicator direction="down">👇</Overflow.Indicator>
-      </Overflow>
+      <div
+        style={{
+          display: 'grid',
+          gridAutoFlow: 'column',
+          justifyContent: 'start',
+          margin: 50,
+          gridGap: 20
+        }}
+      >
+        <Overflow
+          tolerance={30}
+          style={{
+            width: 280,
+            height: 200,
+            maxHeight: 300,
+            border: '2px solid rgb(93, 160, 238)',
+            fontFamily: 'Lato',
+            fontSize: 18
+          }}
+        >
+          <Overflow.Content
+            style={{
+              color: 'rgb(47, 44, 42)'
+            }}
+          >
+            <h2>Ingredients:</h2>
+            <ul>
+              <li>3 slices fresh cucumber</li>
+              <li>3 sprigs fresh mint</li>
+              <li>a pinch of salt</li>
+              <li>2 oz gin</li>
+              <li>¾ oz lime juice</li>
+              <li>¾ oz simple syrup</li>
+              <li>3 drops rose water</li>
+              <li>3 drops Angostura bitters</li>
+            </ul>
+          </Overflow.Content>
+          <Overflow.Indicator direction="up">
+            {canScroll => <Shadow direction="up" isVisible={canScroll} />}
+          </Overflow.Indicator>
+          <Overflow.Indicator direction="down">
+            {canScroll => <Shadow direction="down" isVisible={canScroll} />}
+          </Overflow.Indicator>
+        </Overflow>
+        <Overflow
+          tolerance={30}
+          style={{
+            width: 280,
+            height: 200,
+            maxHeight: 300,
+            border: '2px solid rgb(93, 160, 238)',
+            fontFamily: 'Lato',
+            fontSize: 18
+          }}
+        >
+          <Overflow.Content
+            style={{
+              color: 'rgb(47, 44, 42)'
+            }}
+          >
+            <h2>Ingredients:</h2>
+            <ul>
+              <li>3 slices fresh cucumber</li>
+              <li>3 sprigs fresh mint</li>
+              <li>a pinch of salt</li>
+              <li>2 oz gin</li>
+              <li>¾ oz lime juice</li>
+              <li>¾ oz simple syrup</li>
+              <li>3 drops rose water</li>
+              <li>3 drops Angostura bitters</li>
+            </ul>
+          </Overflow.Content>
+          <Overflow.Indicator direction="up">
+            {canScroll => (
+              <Shadow
+                direction="up"
+                isVisible={canScroll}
+                size={30}
+                startColor="rgba(255, 255, 255, 1)"
+                endColor="rgba(255, 255, 255, 0)"
+              />
+            )}
+          </Overflow.Indicator>
+          <Overflow.Indicator direction="down">
+            {canScroll => (
+              <Shadow
+                direction="down"
+                isVisible={canScroll}
+                size={30}
+                startColor="rgba(255, 255, 255, 1)"
+                endColor="rgba(255, 255, 255, 0)"
+              />
+            )}
+          </Overflow.Indicator>
+        </Overflow>
+        <Overflow
+          tolerance={30}
+          style={{
+            width: 280,
+            height: 200,
+            maxHeight: 300,
+            border: '2px solid rgb(93, 160, 238)',
+            fontFamily: 'Lato',
+            fontSize: 18
+          }}
+        >
+          <Overflow.Content
+            style={{
+              color: 'rgb(47, 44, 42)'
+            }}
+          >
+            <h2>Ingredients:</h2>
+            <ul>
+              <li>3 slices fresh cucumber</li>
+              <li>3 sprigs fresh mint</li>
+              <li>a pinch of salt</li>
+              <li>2 oz gin</li>
+              <li>¾ oz lime juice</li>
+              <li>¾ oz simple syrup</li>
+              <li>3 drops rose water</li>
+              <li>3 drops Angostura bitters</li>
+            </ul>
+          </Overflow.Content>
+          <Overflow.Indicator direction="down">
+            {canScroll => (
+              <span
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 12,
+                  transform: 'translate3d(-50%, 0, 0)',
+                  display: 'inline-block',
+                  width: 40,
+                  height: 40,
+                  fontSize: 24,
+                  border: '1px solid #ddd',
+                  lineHeight: '40px',
+                  background: 'white',
+                  borderRadius: '50%',
+                  textAlign: 'center',
+                  opacity: canScroll ? 1 : 0,
+                  animation: 'bounce 2s infinite ease',
+                  transition: 'opacity 500ms 500ms ease-out'
+                }}
+              >
+                {canScroll ? '⏬' : '✅'}
+              </span>
+            )}
+          </Overflow.Indicator>
+        </Overflow>
+      </div>
     </main>
   );
 }

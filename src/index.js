@@ -25,7 +25,9 @@ const viewportStyle = {
 
 const contentStyle = {
   display: 'inline-block',
-  position: 'relative'
+  position: 'relative',
+  minWidth: '100%',
+  boxSizing: 'border-box'
 };
 
 function reducer(state, action) {
