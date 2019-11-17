@@ -63,7 +63,7 @@ function getInitialState() {
 const emptyStyle = {};
 
 /**
- * The overflow state provider. At a minimum it must contain a
+ * The overflow state provider. At a minimum it must contain an
  * `<Overflow.Content>` element, otherwise it will do nothing.
  *
  * ```jsx
@@ -138,7 +138,7 @@ export default function Overflow({
 
 Overflow.propTypes = {
   /**
-   * Elements to render inside the outer container. This should include a
+   * Elements to render inside the outer container. This should include an
    * `<Overflow.Content>` element at a minimum, but should also include your
    * scroll indicators if you’d like to overlay them on the scrollable viewport.
    */
@@ -162,7 +162,7 @@ Overflow.propTypes = {
 /**
  * Wrapper for content to render inside the scrollable viewport. This element
  * will grow to whatever size it needs to hold its content, and will cause the
- * parent viewport element to overflow. It must be rendered inside a
+ * parent viewport element to overflow. It must be rendered inside an
  * `<Overflow>` ancestor.
  */
 function OverflowContent({ children, style: styleProp, ...rest }) {
@@ -281,7 +281,7 @@ OverflowContent.propTypes = {
 /**
  * A helper component for rendering your custom indicator when the viewport is
  * scrollable in a particular direction (or any direction). Must be rendered
- * inside a `<Overflow>` ancestor.
+ * inside an `<Overflow>` ancestor.
  *
  * You can provide a `direction` prop to indicate when scrolling is allowed in
  * a particular direction:
