@@ -105,6 +105,8 @@ for it to actually scroll. Apply that style as you would any other element, with
 <Overflow style={{ maxHeight: 500 }}>…</Overflow>
 ```
 
+Example with styled-components:
+
 ```jsx
 const MyContainer = styled(Overflow)`
   max-height: 500px;
