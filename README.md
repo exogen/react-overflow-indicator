@@ -334,6 +334,7 @@ Returns an object like:
 <Overflow.Indicator direction="down">
   {(canScroll, refs) => (
     <button
+      type="button"
       onClick={() => {
         refs.viewport.current.scrollBy({
           top: refs.viewport.current.clientHeight,
