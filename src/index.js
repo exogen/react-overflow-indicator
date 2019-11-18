@@ -367,9 +367,9 @@ OverflowIndicator.displayName = 'Overflow.Indicator';
 OverflowIndicator.propTypes = {
   /**
    * Indicator to render when scrolling is allowed in the requested direction.
-   * If given a function, it will be passed the overflow state and and object
-   * containing the `viewport` ref (you can use the `refs` parameter to render
-   * an indicator that is also a button that scrolls the viewport).
+   * If given a function, it will be passed the overflow state and an object
+   * containing the `viewport` ref. You can use this `refs` parameter to render
+   * an indicator that is also a button that scrolls the viewport (for example).
    */
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   /**
