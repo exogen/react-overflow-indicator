@@ -75,7 +75,7 @@ return (
         Render an element or put your content directly here…
       </Overflow.Content>
     </Overflow>
-    {canScrollDown ? '👇' : '🌈'}
+    {canScroll ? '👇' : '🌈'}
   </>
 );
 ```
