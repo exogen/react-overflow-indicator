@@ -147,8 +147,8 @@ indicators if you’d like to overlay them on the scrollable viewport.
 <td valign="top" align="right" rowspan="1"></td>
 <td valign="top" valign="top" rowspan="1">
 
-Callback that receives the latest overflow state, if you’d like to react to
-scrollability in a custom way.
+Callback that receives the latest overflow state and an object of refs, if you’d
+like to react to overflow in a custom way.
 
 </td>
 </tr>
@@ -272,8 +272,9 @@ One&nbsp;of… <br>
 <td valign="top" valign="top" rowspan="1">
 
 Indicator to render when scrolling is allowed in the requested direction. If
-given a function, it will be passed the overflow state and its result will be
-rendered.
+given a function, it will be passed the overflow state and and object containing
+the `viewport` ref (you can use the `refs` parameter to render an indicator that
+is also a button that scrolls the viewport).
 
 </td>
 </tr>
@@ -297,6 +298,55 @@ active when scrolling is allowed in any direction.
 </tbody>
 </table>
 <!-- AUTO-GENERATED-CONTENT:END -->
+
+### useOverflow
+
+This hook provides full access to the Overflow’s context containing its current
+`state` and `refs`. While `<Overflow.Indicator>` should be good enough for most
+use cases, you can use this if you have other use cases in mind. Must be used
+inside an `<Overflow>` ancestor.
+
+Returns an object like:
+
+```js
+{
+  state: {
+    canScroll: {
+      up: Boolean,
+      left: Boolean,
+      right: Boolean,
+      down: Boolean
+    }
+  },
+  dispatch: Function,
+  tolerance: Number | String,
+  refs: {
+    viewport: Object
+  }
+}
+```
+
+## Examples
+
+### Make the indicator a button that scrolls the viewport
+
+```jsx
+<Overflow.Indicator direction="down">
+  {(canScroll, refs) => (
+    <button
+      onClick={() => {
+        refs.viewport.current.scrollBy({
+          top: refs.viewport.current.clientHeight,
+          behavior: 'smooth'
+        });
+      }}
+      style={{ position: 'absolute', right: 10, bottom: 10 }}
+    >
+      {canScroll ? '⏬' : '✅'}
+    </button>
+  )}
+</Overflow.Indicator>
+```
 
 ## Implementation Details
 

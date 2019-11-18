@@ -372,29 +372,37 @@ export default function DemoPage() {
             </ul>
           </Overflow.Content>
           <Overflow.Indicator direction="down">
-            {canScroll => (
-              <span
+            {(canScroll, refs) => (
+              <button
+                onClick={() => {
+                  console.log(refs.viewport.current);
+                  refs.viewport.current.scrollBy({
+                    top: refs.viewport.current.clientHeight,
+                    behavior: 'smooth'
+                  });
+                }}
                 style={{
+                  display: 'inline-block',
                   position: 'absolute',
                   right: 0,
                   bottom: 12,
-                  transform: 'translate3d(-50%, 0, 0)',
-                  display: 'inline-block',
                   width: 40,
                   height: 40,
-                  fontSize: 24,
+                  transform: 'translate3d(-50%, 0, 0)',
                   border: '1px solid #ddd',
-                  lineHeight: '40px',
-                  background: 'white',
                   borderRadius: '50%',
+                  padding: 0,
+                  fontSize: 24,
+                  lineHeight: '40px',
                   textAlign: 'center',
+                  background: 'white',
                   opacity: canScroll ? 1 : 0,
                   animation: 'bounce 2s infinite ease',
                   transition: 'opacity 500ms 500ms ease-out'
                 }}
               >
                 {canScroll ? '⏬' : '✅'}
-              </span>
+              </button>
             )}
           </Overflow.Indicator>
         </Overflow>

@@ -9,6 +9,10 @@ import PropTypes from 'prop-types';
 
 const Context = React.createContext();
 
+export function useOverflow() {
+  return useContext(Context);
+}
+
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -60,8 +64,6 @@ function getInitialState() {
   };
 }
 
-const emptyStyle = {};
-
 /**
  * The overflow state provider. At a minimum it must contain an
  * `<Overflow.Content>` element, otherwise it will do nothing.
@@ -99,12 +101,13 @@ const emptyStyle = {};
 export default function Overflow({
   children,
   onStateChange,
+  style: styleProp,
   tolerance = 0,
   ...rest
 }) {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
   const hidden = rest.hidden;
-  const styleProp = rest.style || emptyStyle;
+  const viewportRef = useRef();
 
   const style = useMemo(
     () => ({
@@ -116,27 +119,33 @@ export default function Overflow({
       // `display: none` and allow that, otherwise ensure we use the value from
       // `containerStyle`.
       display:
-        hidden || styleProp.display === 'none' ? 'none' : containerStyle.display
+        hidden || (styleProp && styleProp.display === 'none')
+          ? 'none'
+          : containerStyle.display
     }),
     [hidden, styleProp]
   );
 
-  const context = useMemo(() => {
-    return {
+  const refs = useMemo(() => ({ viewport: viewportRef }), []);
+
+  const context = useMemo(
+    () => ({
       state,
       dispatch,
-      tolerance
-    };
-  }, [state, tolerance]);
+      tolerance,
+      refs
+    }),
+    [refs, state, tolerance]
+  );
 
   useEffect(() => {
     if (onStateChange) {
-      onStateChange(state);
+      onStateChange(state, refs);
     }
-  }, [onStateChange, state]);
+  }, [onStateChange, refs, state]);
 
   return (
-    <div data-overflow-wrapper="" {...rest} style={style}>
+    <div data-overflow-wrapper="" style={style} {...rest}>
       <Context.Provider value={context}>{children}</Context.Provider>
     </div>
   );
@@ -150,8 +159,8 @@ Overflow.propTypes = {
    */
   children: PropTypes.node,
   /**
-   * Callback that receives the latest overflow state, if you’d like to react
-   * to scrollability in a custom way.
+   * Callback that receives the latest overflow state and an object of refs, if
+   * you’d like to react to overflow in a custom way.
    */
   onStateChange: PropTypes.func,
   /**
@@ -176,8 +185,8 @@ Overflow.propTypes = {
  * interfering with the styles this component needs to function.
  */
 function OverflowContent({ children, style: styleProp, ...rest }) {
-  const { dispatch, tolerance } = useContext(Context);
-  const rootRef = useRef();
+  const { dispatch, tolerance, refs } = useOverflow();
+  const { viewport: viewportRef } = refs;
   const contentRef = useRef();
   const toleranceRef = useRef();
   const watchRef = tolerance ? toleranceRef : contentRef;
@@ -186,7 +195,7 @@ function OverflowContent({ children, style: styleProp, ...rest }) {
   useEffect(() => {
     let ignore = false;
 
-    const root = rootRef.current;
+    const root = viewportRef.current;
 
     const createObserver = (direction, rootMargin) => {
       const threshold = 1e-12;
@@ -228,7 +237,7 @@ function OverflowContent({ children, style: styleProp, ...rest }) {
       observers.right.disconnect();
       observers.down.disconnect();
     };
-  }, [dispatch]);
+  }, [dispatch, viewportRef]);
 
   useEffect(() => {
     const observers = observersRef.current;
@@ -254,25 +263,31 @@ function OverflowContent({ children, style: styleProp, ...rest }) {
     };
   }, [styleProp]);
 
+  const toleranceElement = useMemo(
+    () =>
+      tolerance ? (
+        <div
+          data-overflow-tolerance
+          ref={toleranceRef}
+          style={{
+            position: 'absolute',
+            top: tolerance,
+            left: tolerance,
+            right: tolerance,
+            bottom: tolerance,
+            background: 'transparent',
+            pointerEvents: 'none',
+            zIndex: -1
+          }}
+        />
+      ) : null,
+    [tolerance]
+  );
+
   return (
-    <div ref={rootRef} data-overflow-viewport="" style={viewportStyle}>
+    <div ref={viewportRef} data-overflow-viewport="" style={viewportStyle}>
       <div ref={contentRef} data-overflow-content="" style={style} {...rest}>
-        {tolerance ? (
-          <div
-            data-overflow-tolerance
-            ref={toleranceRef}
-            style={{
-              position: 'absolute',
-              top: tolerance,
-              left: tolerance,
-              right: tolerance,
-              bottom: tolerance,
-              background: 'transparent',
-              pointerEvents: 'none',
-              zIndex: -1
-            }}
-          />
-        ) : null}
+        {toleranceElement}
         {children}
       </div>
     </div>
@@ -330,18 +345,18 @@ OverflowContent.propTypes = {
  * ```
  */
 function OverflowIndicator({ children, direction }) {
-  const context = useContext(Context);
-  const { canScroll: state } = context.state;
-  const canScroll = direction
-    ? state[direction]
-    : state.up || state.left || state.right || state.down;
+  const { state, refs } = useOverflow();
+  const { canScroll } = state;
+  const isActive = direction
+    ? canScroll[direction]
+    : canScroll.up || canScroll.left || canScroll.right || canScroll.down;
 
-  let shouldRender = canScroll;
+  let shouldRender = isActive;
 
   if (typeof children === 'function') {
-    const arg = direction ? canScroll : state;
     shouldRender = true;
-    children = children(arg);
+    const stateArg = direction ? isActive : canScroll;
+    children = children(stateArg, refs);
   }
 
   return shouldRender ? <>{children}</> : null;
@@ -352,8 +367,9 @@ OverflowIndicator.displayName = 'Overflow.Indicator';
 OverflowIndicator.propTypes = {
   /**
    * Indicator to render when scrolling is allowed in the requested direction.
-   * If given a function, it will be passed the overflow state and its result
-   * will be rendered.
+   * If given a function, it will be passed the overflow state and and object
+   * containing the `viewport` ref (you can use the `refs` parameter to render
+   * an indicator that is also a button that scrolls the viewport).
    */
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   /**
