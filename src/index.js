@@ -173,6 +173,10 @@ Overflow.propTypes = {
   tolerance: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 };
 
+// For Firefox, update on a threshold of 0 in addition to any intersection at
+// all (represented by a tiny tiny threshold).
+const threshold = [0, 1e-12];
+
 /**
  * Wrapper for content to render inside the scrollable viewport. This element
  * will grow to whatever size it needs to hold its content, and will cause the
@@ -198,19 +202,23 @@ function OverflowContent({ children, style: styleProp, ...rest }) {
     const root = viewportRef.current;
 
     const createObserver = (direction, rootMargin) => {
-      const threshold = 1e-12;
-
       return new IntersectionObserver(
         ([entry]) => {
           if (ignore) {
             return;
           }
 
-          const canScroll =
+          const hasSize = Boolean(
             entry.boundingClientRect.width || entry.boundingClientRect.height
-              ? entry.isIntersecting
-              : false;
-
+          );
+          const canScroll =
+            hasSize &&
+            // Interestingly, Firefox can return an entry with an
+            // `intersectionRatio` of 0 but `isIntersecting` of false.
+            // This doesn't really make any sense. But check both just in
+            // case.
+            entry.intersectionRatio !== 0 &&
+            entry.isIntersecting;
           dispatch({ type: 'CHANGE', direction, canScroll });
         },
         {
